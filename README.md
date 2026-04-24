@@ -8,3 +8,5 @@ FOr the first tasks make sure you understand how to use the tool box, watch the 
 Improvements are worth 20% so research other filter design and talk about the advantages from the ones we have learnt, FIR window and sample filter design. The prof really does not want a lot of text as all, they want to see graphs and a short description of what the graphs show. For the advances objective, the hint is to look at what casues those noise and how we can actually address that. That was their hint, to research what casues noises in the saignal and then to design a filter in order to address such. 
 
 Also this coursework is meant to be an intro into IIIR filters as we have yet to cover that.
+
+How to label a specific thing in MATLAB https://uk.mathworks.com/help/signal/ug/find-peaks-in-data.html
