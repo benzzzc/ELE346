@@ -1,0 +1,1805 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsmath}
+\usepackage[english]{babel}
+\usepackage[margin=2cm]{geometry}
+\usepackage{mathptmx}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\graphicspath{{figures/}}
+\usepackage{array}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{float}
+\usepackage[numbers]{natbib} 
+\usepackage{url}
+\usepackage{tabularx} % Required for X columns
+\usepackage{multirow}
+
+
+
+\title{ELE334 Assignment}
+\author{Carl Benedict Castro \\
+220149799}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\listoffigures
+\listoftables
+
+\newpage
+
+\section{Part A}
+
+\subsection{(a)}
+\subsubsection{Multi-Chemistry Battery Adaptability}
+
+Traditional Battery Management Systems (BMS) are limited to the fixed mathematical models developed for a specific battery type.
+Issues arise when the hardware necessitates the changing of battery chemistries (take, for example going from $Lithium-Ion$ to $LiFePO_4$), which often requires a complete overhaul of the system.  
+This is because the rigid mathematical models used within the controllers hard-code the battery operational parameters (such as thermal threshold, current limits, etc.) to the system firmware.
+Thus, when the battery chemistry is changed, the previous settings are incompatible with the newly integrated one; as different battery chemistries accomodate their own unique charging profiles \cite{BMS}.
+\\
+
+Intelligent systems that utilise Fuzzy Logic Control (FLC) can address these issues.
+Though changing the parameters of traditional BMS could be done, it often entails completely changing the logic and mathematics of the controller.
+FLC holds the advantage as updating a fuzzy system only requires changing a few Membership Function (MF) definitions, such as their rules and parameters.
+This is because FLC replaces the mathematical equations with linguistic variables, such as "Low Temperature" or "High Temperature".
+Thus, by the relatively simple adjustments to the MFs labels and parameters, a single hardware system can easily attune to several different battery chemistries.
+The FLC developed within the literature is developed in tandem with "smart" identification systems, such as artificial neural networks that identify the battery's chemical composition based on its voltage-current response (at 100\% accuracy)\cite{onehundred}. 
+Automating the classification process, circumventing the need to manually tune the MF parameters.
+This allows for a system controller that realigns its parameters based on the specific battery chemistry, rather than causing system-wide failure.
+\\
+
+The system validation, for the developed FLC by Shaout and Brauchler \cite{BMS}, relied on the "primitive model" developed in MATLAB to observe the designed FLC, where the equations underscoring the behaviour of the model were linear.
+Real-life battery behaviour is a complex, dynamic, and non-linear process, unable to be accurately captured by the simple "primitive model".
+Though the authors note and understand the limitations of the "primitive" model, the importance of this needs to be emphasised.
+Additionally, the physical hardware prototype discussed in this article only had two battery cells in series.
+Significantly much smaller in scale than the ones that are currently implemented in industry or for electric vehicles.
+Therefore, the results may not fully represent the challenges inherent with a larger-scale battery system \cite{BMS}.
+
+\subsubsection{Smart Grids and Energy Management}
+
+FLC addresses the inherent uncertainty present in weather-dependent energy generation and load forecasts.
+Where binary logic fails to handle the stochastic nature of renewable energy, as the variables present within the system are often not discrete, but are rather a continuum that can to be successfully captured by discrete binary variables.
+FLC's utilisation of MFs more successfully captures the behaviour of the system; thus, more robust control measures can be taken.
+The article, written by Gopal, compares the conventional binary logic system to the FLC, seen through Table \ref{tab:logicComparison}, it is evident that FLC hold some advantages over conventional binary systems.
+\\
+
+Gopal does state that there are limitations to the use of FLC for energy management, one of which is that FLC systems achieve lower accuracy compared to recurrent and convolutional neural networks.
+Moreover, Gopal notes that the implementation of FLC within the current energy grid is hindered by the aging infrastructure.
+Where the grid was never designed to accommodate such systems, like FLC \cite{kolli2025}.
+
+\begin{table}[H]
+\centering
+% Column 1: Left aligned (l)
+% Column 2: Centered, fixed width 2.5cm
+% Column 3: Centered, fixed width 4.0cm (wider to fit the header text)
+\begin{tabular}{|l| >{\centering\arraybackslash}p{2.5cm} | >{\centering\arraybackslash}p{4.0cm} |}
+\hline
+\textbf{Metric} & \textbf{Fuzzy Logic} & \textbf{Traditional Binary Logic} \\
+\hline
+Average Energy Consumption (kWh) & 230 & 250 \\ \hline
+Peak Load (kW)                   & 65  & 75  \\ \hline
+Control Response Time (seconds)  & 3   & 5   \\ \hline
+User Satisfaction Rating (1-10)  & 8   & 6   \\ \hline
+\end{tabular}
+\caption{Comparison of performance metrics between Fuzzy Logic and Traditional Binary Logic}
+\label{tab:logicComparison}
+\end{table}
+
+\subsubsection{Collaborative Robots Control}
+
+In contrast to traditional industrial robots that work in isolation from human operators, Collaborative Robots (Cobots) are designed to work in tandem with human operators within shared workspaces.
+This is achieved through FLC, which is able to adapt to the variability of human nature and the complex work-space environment.
+Conventional control methods fail to capture human behaviour; FLC methods are able to reflect such behaviour through the integration of linguistic rule bases and MFs.
+Where "close distance" and "quick speed" rules are more able to interpret such dynamics, and thus the fuzzy system can develop greater robust control strategies.
+Which closely follow the industrial safety standards for Cobots stated in ISO/TS 15066:2016. 
+This is addressed by the implementation of four safety modes, those being: "Safety-Rated Monitored Stop", "Hand Guiding", "Speed and Separation Monitoring", and "Power and Force Limiting".
+As described in the article by Autsou, Dunajeva, Pentel, et al \cite{collab}.
+FLC achieves these modes by associating sensor data in a way which mimics human interpretation, as discussed above this is done by the rules being linguistic and by the MF parameters, which often overlap, allowing for the MFs to be a spectrum rather than discrete rigid functions.
+Mimicking the subjective perception of what human operators may constitute as "close" or "far".
+\\
+
+While FLC provides a robust alternative to conventional control methods, it is greatly more computationally complex and costly.
+Limiting the feasibility of its implementation where real-time data acquisition is limited, such as edge platform systems.
+Furthermore, the paper notes that there is a lack of literature surrounding the automatic optimisation of FLC parameters (specific to Cobots), which means that manual tuning and effort still need to be carried out.
+Restricting the time efficiency and effectiveness of the overall system process \cite{collab}. 
+
+\subsection{(b)}
+
+The rule base introduced in laboratory A was further expanded from 9 rule bases to 25. 
+This was achieved through intuition from the inspection of the 9 rule bases' corresponding surface diagram. 
+Where the surface consisted of sharp "cliffs" and "edges", which caused sharp changes in the output at those input values.
+Such swift changes to the output needed to be addressed, as it was an undesirable behaviour of the system response.
+Therefore, the desired rules would yield a smooth and gradual surface diagram, as this implied a response less prone to instability, overshooting, and would be much more predictable.
+Considering the system's purpose for use within the medical field, such conclusions were appropriate. 
+\\
+
+The expanded rules shown in Table \ref{tab:fuzzy_rules} display the outcome of the considerations discussed previously.
+Where the rules for positive and negative were catergorised into either small or big, allowing for greater precision in the output. 
+Thus, permitting a smoother response in the developed surface diagram, see Figure \ref{fig:surfaceA}.
+Furthermore, along with the larger rules base, the membership function's definitions were adjusted to achieve a desired response. 
+Seen in Tables \ref{tab:error}, \ref{tab:errorRate}, \ref{tab:output}, the membership function parameters of the extreme inputs were larger, enabling a swifter corrective response.
+The membership function parameters of the inputs at the steady state (output of zero) were much narrower, granting weighting to this state, so that the system steadied at this state. 
+The intermediary membership functions were then manually tuned to achieve the desired smooth response in the system surface diagram.
+\\
+
+\begin{table}[H]
+    \centering
+    % We define the table to take up the full text width
+    % The column definition ">{\centering\arraybackslash}X" means:
+    % 1. Centered text
+    % 2. Auto-width (X)
+    % 3. Wrap text
+    \begin{tabularx}{\textwidth}{| *{6}{>{\centering\arraybackslash}X|} }
+        \hline
+        \textbf{Error / Rate} & \textbf{Negative Big (NB)} & \textbf{Negative Small (NS)} & \textbf{Zero (ZE)} & \textbf{Positive Small (PS)} & \textbf{Positive Big (PB)} \\
+        \hline
+        \textbf{NB} & Drug NB & Drug NB & Drug NB & Drug NS & Drug ZE \\
+        \hline
+        \textbf{NS} & Drug NB & Drug NS & Drug NS & Drug ZE & Drug PS \\
+        \hline
+        \textbf{ZE} & Drug NB & Drug NS & Drug ZE & Drug PS & Drug PB \\
+        \hline
+        \textbf{PS} & Drug NS & Drug ZE & Drug PS & Drug PS & Drug PB \\
+        \hline
+        \textbf{PB} & Drug ZE & Drug PS & Drug PB & Drug PB & Drug PB \\
+        \hline
+    \end{tabularx}
+    \caption{5x5 Fuzzy Rule Base Matrix For Fuzzy PI Controller (NB: Negative Big, NS: Negative Small, ZE: Zero, PS: Positive Small, PB: Positive Big).}
+    \label{tab:fuzzy_rules}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.8\linewidth]{castro_part_A_section_b.png}
+    \caption{Surface Diagram For Fuzzy PI Controller.}
+    \label{fig:surfaceA}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{MF Index} & \textbf{Label} & \textbf{Type} & \textbf{Sigma ($\sigma$)} & \textbf{Center ($c$)} \\ \hline
+MF1 & Negative\_Big & gaussmf & 0.5 & -1 \\ \hline
+MF2 & Zero & gaussmf & 0.3 & 0 \\ \hline
+MF3 & Positive\_Big & gaussmf & 0.4 & 1 \\ \hline
+MF4 & Negative\_Small & gaussmf & 0.3 & -0.3 \\ \hline
+MF5 & Positive\_Small & gaussmf & 0.3 & 0.3 \\ \hline
+\end{tabular}
+\caption{Membership Function Parameters for Input 1 (error).}
+\label{tab:error}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{MF Index} & \textbf{Label} & \textbf{Type} & \textbf{Sigma ($\sigma$)} & \textbf{Center ($c$)} \\ \hline
+MF1 & NegativeBig\_Rate & gaussmf & 0.4 & -1 \\ \hline
+MF2 & Zero\_Rate & gaussmf & 0.25 & 0 \\ \hline
+MF3 & PositiveBig\_Rate & gaussmf & 0.4 & 1 \\ \hline
+MF4 & NegativeSmall\_Rate & gaussmf & 0.35 & -0.3 \\ \hline
+MF5 & PositiveSmall\_Rate & gaussmf & 0.35 & 0.3 \\ \hline
+\end{tabular}
+\caption{Membership Function Parameters for Input 2 (rate).}
+\label{tab:errorRate}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{MF Index} & \textbf{Label} & \textbf{Type} & \textbf{Sigma ($\sigma$)} & \textbf{Center ($c$)} \\ \hline
+MF1 & drug\_negbig & gaussmf & 0.35 & -1 \\ \hline
+MF2 & drug\_zero & gaussmf & 0.2 & 0 \\ \hline
+MF3 & drug\_posbig & gaussmf & 0.35 & 1 \\ \hline
+MF4 & drug\_negsmall & gaussmf & 0.25 & -0.5 \\ \hline
+MF5 & drug\_possmall & gaussmf & 0.25 & 0.6 \\ \hline
+\end{tabular}
+\caption{Membership Function Parameters for Output 1 (Drug\_Input).}
+\label{tab:output}
+\end{table}
+
+
+Manual tuning of the fuzzy scaling factors $G_e$, $G_CE$, and $G_U$ needed to be done to ensure a robust system. 
+This was done through the understanding that $G_U$ had the greatest influence on the system response; therefore, this was tuned first to ensure that the general behaviour was acceptable. 
+$G_e$ and $G_CE$ were further adjusted to address the system response time and oscillations, respectively.
+The preceding scaling factors were utilised, as seen in Table \ref{tab:scalingFactorAb}
+The resulting system response is shown in Figure \ref{fig:responseAb} and in Table \ref{tab:performanceAb} and \ref{tab:characteristicsAb}.
+For all the systems in Part A, unless stated otherwise, a disturbance of 0.15 was introduced for 150 minutes.
+\\
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|l|}
+\hline
+\textbf{Scaling Factor} & \textbf{Value} & \textbf{Function} \\ \hline
+$G_e$ & 10 & Error scaling factor \\ \hline
+$G_{ce}$ & 65 & Rate (change of error) scaling factor \\ \hline
+$G_u$ & 0.1 & Output scaling factor \\ \hline
+\end{tabular}
+\caption{Scaling Factors for the PI Fuzzy Controller.}
+\label{tab:scalingFactorAb}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.8\linewidth]{Apart1.png}
+    \caption{Step Response for the PI Fuzzy Controller (reference signal at 0.8).}
+    \label{fig:responseAb}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Metric} & \textbf{Fuzzy Controller} & \textbf{Patient Model} \\ \hline
+Rise Time (min) & 32.9601 & 24.7856 \\ \hline
+Transient Time (min) & NaN & 167.8724 \\ \hline
+Settling Time (min) & NaN & 167.8724 \\ \hline
+Settling Min & 0.4560 & 0.7238 \\ \hline
+Settling Max & 0.7811 & 0.8368 \\ \hline
+Overshoot (\%) & 0.0000 & 4.6057 \\ \hline
+Undershoot & 0.0000 & 0.0000 \\ \hline
+Peak Value & 0.7811 & 0.8368 \\ \hline
+Peak Time (min) & 38.0098 & 159.0255 \\ \hline
+\end{tabular}
+\caption{Step Response Characteristics (step info) for Manual Tuning}
+\label{tab:characteristicsAb}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Performance Index} & \textbf{Numerical Value} \\ \hline
+Mean Absolute Error (MAE) & 0.079273 \\ \hline
+Mean Square Error (MSE) & 0.044579 \\ \hline
+Root-Mean Square Error (RMSE) & 0.211136 \\ \hline
+\end{tabular}
+\caption{Performance Indices for the PI Fuzzy Controller.}
+\label{tab:performanceAb}
+\end{table}
+
+It was important to note the systems non-linearity, grounded in the Equations \textit{(A1)} and \textit{(A2)} describing the system, which represents the dynamics of the system as a sigmoid-shaped hill function.
+That gave rise to "dead zones" at low and high drug concentrations.
+This meant that the overall system dynamics, not being a simple linear one, drastically depended on the patient's current state.
+Although Fuzzy Inference Systems (FIS) Proportional Integral (PI) controller was designed to address the issues of non-linearity, relying purely on manual tuning of the system parameters would unlikely realise perfect results.
+\\
+
+Though steady state error (0.0368) still persisted, it can be corrected through more robust tuning.
+The system response was rather aggressive, giving rise to a swift response, as stated through the system rise time of around 24 minutes. 
+Reinforced with the predominant time constant being 20 minutes. 
+The transient response time can be explained by the disturbance introduced within the system, visual inspection of the response displays how well the controller performed under disturbances.
+Ensuring to correct the disturbance whilst maintaining minimal overshoot and oscillations in the response. 
+The system finally settled swiftly around 15 minutes after the disturbance subsided.
+The performance metric MAE suggests that the overall system response deviated around 8\% from the target reference of (0.8).
+RMSE being notably higher was due to the overshoot that occurred at the end of the disturbance and during the rise time.
+Where the MSE is just the parent statistic for the RMSE.
+\\
+
+Considering the purpose of the controller, that is, for controlling the dosage of a drug relaxer, the process demands a controller that has a swift rise time, low overshoot, minimal steady state error, and maintains accurate tracking to the target reference. 
+The designed controller performed well in maintaining minimal overshoot from the reference target.
+However, the deviation of ~10\% from the reference target was worrisome; given the context, this deviation may manifest in the patient not receiving enough to be put "under".
+Though it would be more likely, through visual inspection of Figure \ref{fig:responseAb}, the deviation may result in the patient ingesting too much of the drug.
+Regardless, both cases would result in significant patient safety hazards.
+Furthermore, despite the swift response of the system, room for improvement in the transient accuracy of the response is left desired.
+The overshoot arisen from the end of the disturbance was not aggressively addressed enough, and the system failed to dampen the momentum of the system in time.
+This leads to the notably large RMSE value.
+\\
+
+\begin{equation}
+    G(s) = \frac{X_1}{U} = \frac{(1 + 10.64s) e^{-s}}{(1 + 3.08s)(1 + 4.81s)(1 + 20s)} 
+    \tag{A1}
+\end{equation}
+
+\begin{equation}
+    Y = \frac{X^{12.98}}{X^{12.98} + (0.404)^{2.98}} 
+    \tag{A2}
+\end{equation}
+
+In order to address this, the development of a genetic algorithm was carried out to optimise the scaling factors of the model, in the hopes of achieving a more desirable system response.
+The code for this can be seen in Appendix 3.0.1.
+The main cost function for the algorithm is based on the Integral of Squared Error (ISE), where the purpose lies in tackling the large errors of the previous response.
+The optimised scaling factors can be seen in Table \ref{tab:scalingFactorAbgenetic}, the system response can be seen in Figure \ref{fig:responseAbgenetic} and Table \ref{tab:characteristicsAbgenetic}, the performance metrics can be seen in Table \ref{tab:performanceAbgenetic}
+Though the performance metrics point to a much better system response than the manual tuning, visual inspection of the response, and taking the characteristics into consideration, the response is overall less desirable than the manually tuned one.
+Attributed to the incorrect choice of the cost function.
+Despite the promise that this optimisation technique holds, further improvements were not made due to time and computational restraints of the environment in which the assignment is being done. 
+Thus, manual tuning of parameters persisted throughout the assignment.
+\\
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|l|}
+\hline
+\textbf{Scaling Factor} & \textbf{Value} & \textbf{Function} \\ \hline
+$G_e$ &  3.5623  & Error scaling factor \\ \hline
+$G_{ce}$ &  51.1915  & Rate (change of error) scaling factor \\ \hline
+$G_u$ & 0.4967 & Output scaling factor \\ \hline
+\end{tabular}
+\caption{Initial Scaling Factors for the PID-like Fuzzy Controller}
+\label{tab:scalingFactorAbgenetic}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.8\linewidth]{Apart1genA.png}
+    \caption{Step Response for the PI Fuzzy Controller using Genetic Algorithm for Scaling Factor Optimisation.}
+    \label{fig:responseAbgenetic}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Metric} & \textbf{Fuzzy Controller} & \textbf{Patient Model} \\ \hline
+Rise Time (min) & 2.1658 & 8.5603 \\ \hline
+Transient Time (min) & NaN & 293.9023 \\ \hline
+Settling Time (min) & NaN & 293.9023 \\ \hline
+Settling Min & 0.1269 & 0.7259 \\ \hline
+Settling Max & 1 & 0.8353 \\ \hline
+Overshoot (\%) & 2 & 4.4089 \\ \hline
+Undershoot & 0 & 0 \\ \hline
+Peak Value & 1 & 0.8353 \\ \hline
+Peak Time (min) & 3.3845 & 155.0188 \\ \hline
+\end{tabular}
+\caption{Step Info for the PI Fuzzy Controller using Genetic Algorithm for Scaling Factor Optimisation.}
+\label{tab:characteristicsAbgenetic}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Performance Index} & \textbf{Numerical Value} \\ \hline
+Mean Absolute Error (MAE) & 0.059027 \\ \hline
+Mean Square Error (MSE) & 0.031373 \\ \hline
+Root-Mean Square Error (RMSE) & 0.177125 \\ \hline
+\end{tabular}
+\caption{Performance Indices for the PI Fuzzy Controller using Genetic Algorithm for Scaling Factor Optimisation.}
+\label{tab:performanceAbgenetic}
+\end{table}
+
+\subsection{(c)}
+
+The PI controller was transformed to a Proportional-Derivative PD controller by the removal of the integrator block and then by adjusting the scaling factors accordingly.
+The FIS remained the same, defined in Tables \ref{tab:fuzzy_rules}, \ref{tab:error}, \ref{tab:errorRate}, and \ref{tab:output}.
+See Table \ref{tab:scalingFactorAc} for the altered scaling factors.
+Where the only change was the increase of the $G_U$ from 0.1 to 1 to compensate for the lost integration block, which calculated the incremental change and summed to the total dosage. 
+See Figure \ref{fig:responseAc} for the system response, Table \ref{tab:characteristicsAc} for the response characteristics, and Table \ref{tab:performanceAc} for the performance metrics.
+Another response was generated to observe the system to a faster disturbance of 0.15 with a simulation time of 10 minutes.
+See Figure \ref{fig:responseAcdisturb} for the system response, Table \ref{tab:characteristicsAcdisturb} for the response characteristics, and Table \ref{tab:performanceAcdisturb} for the performance metrics.
+\\
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|l|}
+\hline
+\textbf{Scaling Factor} & \textbf{Value} & \textbf{Function} \\ \hline
+$G_e$ &  10  & Error scaling factor \\ \hline
+$G_{ce}$ &  65  & Rate (change of error) scaling factor \\ \hline
+$G_u$ & 1 & Output scaling factor \\ \hline
+\end{tabular}
+\caption{Scaling Factors for the PD Fuzzy Controller.}
+\label{tab:scalingFactorAc}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.8\linewidth]{Apartc.png}
+    \caption{Step Response for the PD Fuzzy Controller.}
+    \label{fig:responseAc}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Metric} & \textbf{Fuzzy Controller} & \textbf{Patient Model} \\ \hline
+Rise Time (min) & NaN & 149.8622 \\ \hline
+Transient Time (min) & NaN & NaN \\ \hline
+Settling Time (min) & NaN & NaN \\ \hline
+Settling Min & NaN & 0.7201 \\ \hline
+Settling Max & NaN & 0.7300 \\ \hline
+Overshoot (\%) & 0 & 0 \\ \hline
+Undershoot & 0 & 0 \\ \hline
+Peak Value & 0.7121 & 0.7300 \\ \hline
+Peak Time (min) & 84.5050 & 300 \\ \hline
+\end{tabular}
+\caption{Step Info for the PD Fuzzy Controller.}
+\label{tab:characteristicsAc}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Performance Index} & \textbf{Numerical Value} \\ \hline
+Mean Absolute Error (MAE) & 0.263449 \\ \hline
+Mean Square Error (MSE) &0.117340 \\ \hline
+Root-Mean Square Error (RMSE) & 0.342549 \\ \hline
+\end{tabular}
+\caption{Performance Metrics for the PD Fuzzy Controller.}
+\label{tab:performanceAc}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.8\linewidth]{Apartcdistubrance10.png}
+    \caption{Step Response for the PD Fuzzy Controller with the Disturbance of 0.15 at 10 minutes Simulation Time rather than 150 minutes.}
+    \label{fig:responseAcdisturb}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Metric} & \textbf{Fuzzy Controller} & \textbf{Patient Model} \\ \hline
+Rise Time (min) & NaN & 75.1315 \\ \hline
+Transient Time (min) & NaN & NaN \\ \hline
+Settling Time (min) & NaN & NaN \\ \hline
+Settling Min & NaN & 0.7232 \\ \hline
+Settling Max & NaN & 0.7300 \\ \hline
+Overshoot (\%) & 0 & 0 \\ \hline
+Undershoot & 0 & 0 \\ \hline
+Peak Value & 0.6802 & 0.7300 \\ \hline
+Peak Time (min) & 51.8562 & 300 \\ \hline
+\end{tabular}
+\caption{Step Info for the PD Fuzzy Controller with the Disturbance of 0.15 at 10 minutes Simulation Time rather than 150 minutes. }
+\label{tab:characteristicsAcdisturb}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Performance Index} & \textbf{Numerical Value} \\ \hline
+Mean Absolute Error (MAE) & 0.213506 \\ \hline
+Mean Square Error (MSE) & 0.096701 \\ \hline
+Root-Mean Square Error (RMSE) &  0.310968 \\ \hline
+\end{tabular}
+\caption{Performance Indices for the PD Fuzzy Controller with the Disturbance of 0.15 at 10 minutes Simulation Time rather than 150 minutes.}
+\label{tab:performanceAcdisturb}
+\end{table}
+
+Maintaining the same FIS resulted in poor system step responses, where the RMSE value and steady state offset were particularly undersirable.
+It became evident that the Membership Functions (MF) of the FIS needed to be adjusted to address the removal of the integrator block. 
+To address the steady-state error, the rules were adjusted so that the section reflecting the steady state would be steeper. 
+This was done to increase the sensitivity of the PD controller, as it lacked the cumulative "build-up" of the integrator.
+This allowed it to more easily overcome the "dead zones" in the sigmoid-hill function.
+See Tables \ref{tab:errorAc}, \ref{tab:rateAc}, and \ref{tab:outputAc} for the adjusted MF functions and Figure \ref{fig:partAc} for the corresponding surface diagram.
+Furthermore, the scaling factors were further tuned to achieve a more desirable response, see Table \ref{tab:scalingFactorAcnew}.
+\\
+
+Following the changes made to the model, the system response, characteristics, and performance can be seen below. 
+Figure \ref{fig:responseAc} and Tables \ref{tab:characteristicsAcnew}, \ref{tab:performanceAcnew}, respectively.
+The resulting system responded in a much more suitable way than the previous developed fuzzy PD controllers.
+The system rose faster and deviated less from the reference signal, interpreted from the rise time, MAE, and RMSE results.
+Though steady-state error still persisted, it was much lower than the previous PD controller with an unchanged FIS. 
+However, given the deviation of about 23.5\% and the use-case context of the system, it was appropriate to conclude that though the response is "good," significant improvements to the system need to be made.
+To develop a response more suited to the context, thus limiting the safety risks to the patient.
+\\
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{MF Index} & \textbf{Label} & \textbf{Type} & \textbf{Sigma ($\sigma$)} & \textbf{Center ($c$)} \\ \hline
+1 & Negative\_Big & gaussmf & 0.5000 & -1.0000 \\ \hline
+2 & Zero & gaussmf & 0.1251 & 0.0000 \\ \hline
+3 & Positive\_Big & gaussmf & 0.4000 & 1.0192 \\ \hline
+4 & Negative\_Small & gaussmf & 0.2643 & -0.3090 \\ \hline
+5 & Positive\_Small & gaussmf & 0.2712 & 0.3530 \\ \hline
+\end{tabular}
+\caption{Altered Fuzzy PD Membership Function Parameters for Input 1 (Error)}
+\label{tab:errorAc}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{MF Index} & \textbf{Label} & \textbf{Type} & \textbf{Sigma ($\sigma$)} & \textbf{Center ($c$)} \\ \hline
+1 & NegativeBig\_Rate & gaussmf & 0.4000 & -1.0000 \\ \hline
+2 & Zero\_Rate & gaussmf & 0.1813 & 0.0000 \\ \hline
+3 & PositiveBig\_Rate & gaussmf & 0.4000 & 1.0000 \\ \hline
+4 & NegativeSmall\_Rate & gaussmf & 0.3382 & -0.3000 \\ \hline
+5 & PositiveSmall\_Rate & gaussmf & 0.2854 & 0.3000 \\ \hline
+\end{tabular}
+\caption{Altered Fuzzy PD Membership Function Parameters for Input 2 (Rate)}
+\label{tab:rateAc}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{MF Index} & \textbf{Label} & \textbf{Type} & \textbf{Sigma ($\sigma$)} & \textbf{Center ($c$)} \\ \hline
+1 & drug\_negbig & gaussmf & 0.3500 & -1.0000 \\ \hline
+2 & drug\_zero & gaussmf & 0.0544 & 0.0000 \\ \hline
+3 & drug\_posbig & gaussmf & 0.3500 & 1.0000 \\ \hline
+4 & drug\_negsmall & gaussmf & 0.2500 & -0.5683 \\ \hline
+5 & drug\_possmall & gaussmf & 0.2500 & 0.6390 \\ \hline
+\end{tabular}
+\caption{Altered Fuzzy PD Membership Function Parameters for Output 1 (Drug Input)}
+\label{tab:outputAc}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.8\linewidth]{partAc.png}
+    \caption{Altered Surface Control Diagram for Fuzzy PD controller.}
+    \label{fig:partAc}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|l|}
+\hline
+\textbf{Scaling Factor} & \textbf{Value} & \textbf{Function} \\ \hline
+$G_e$ &  30  & Error scaling factor \\ \hline
+$G_{ce}$ &  70  & Rate (change of error) scaling factor \\ \hline
+$G_u$ & 1.1 & Output scaling factor \\ \hline
+\end{tabular}
+\caption{Altered Scaling Factors for Fuzzy PD Controller.}
+\label{tab:scalingFactorAcnew}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.8\linewidth]{partAcnew.png}
+    \caption{Step Response of Altered Fuzzy PD Controller.}
+    \label{fig:responseAc}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Metric} & \textbf{Fuzzy Controller (s1)} & \textbf{Patient Model (s2)} \\ \hline
+Rise Time (s) & 20.4674 & 88.4028  \\ \hline
+Settling Time (s) & NaN & 184.0258  \\ \hline
+Overshoot (\%) & 0 & 0 \\ \hline
+Peak Amplitude & 0.7768 & 0.7895  \\ \hline
+Steady State Error & 0.0232 & 0.0105 \\ \hline
+\end{tabular}
+\caption{Step Info of Altered Fuzzy PD controller.}
+\label{tab:characteristicsAcnew}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Performance Index} & \textbf{Numerical Value} \\ \hline
+Mean Absolute Error (MAE) & 0.188154 \\ \hline
+Mean Square Error (MSE) & 0.089611 \\ \hline
+Root-Mean Square Error (RMSE) &  0.299351 \\ \hline
+\end{tabular}
+\caption{Performance Metrics for Altered Fuzzy PD Controller.}
+\label{tab:performanceAcnew}
+\end{table}
+
+
+\subsection{(d)}
+
+To collect the dataset for the Artificial Neural Fuzzy Inference System (ANFIS) simulink blocks were added to capture the corresponding data: error, rate, and output.
+The data was then shuffled in a random manner and split by 70/30 for the training and checking data.
+The ANFIS model can be seen below.
+A saturation block that limited the range of the inputted values ($[-0.8, 0.8]$), which fed into the FIS block, was added.
+This was because the data used to train the ANFIS model was the data prior to the normilisation due to fuzzification and defuzzification.
+\\
+
+Figure \ref{fig:responseAd} and Tables \ref{tab: characteristicsAd} and \ref{tab:performanceAd} highlight the system response, characteristics, and performance metrics, respectively.
+Where, based on the performance metrics, the system response was better than the fuzzy PD controller.
+At 19\% deviation from the reference and a lower error distribution of 0.217227 (RMSE).
+However, visual inspection of the response and the characteristics imply a less desirable system.
+As the system never truly settled, the rise time is much larger (157 minutes), and an overshoot was introduced to the system.
+\\
+
+The primary advantage of the ANFIS models is the role as a "universal approximator," which is capable of describing complex non-linear processes into a simple rule-based manner, where precise mathematical models were difficult to obtain.
+This is because ANFIS models provide the advantage of handling the FIS optimisation, where the network determines the "best" FIS based on the given data.
+This is often very useful to overcome the limitations introduced by manually tuning the MF and rule parameters of the FIS.
+The system dynamics were difficult and time-consuming to interpret.
+This was achieved using hybrid training, of back-propagation and the least-squares method, which allowed to system to learn directly from the captured dataset, rather than manual "trial-and-error" tuning.
+Furthermore, ANFIS models provided total transparency through the interpretable linguistic rule base, providing the capability to further analyse and develop the model.
+\\
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{MF Index} & \textbf{Label} & \textbf{Type} & \textbf{Sigma ($\sigma$)} & \textbf{Center ($c$)} \\ \hline
+1 & in1mf1 & gaussmf & 0.0838 & 0.0105 \\ \hline
+2 & in1mf2 & gaussmf & 0.0838 & 0.2079 \\ \hline
+3 & in1mf3 & gaussmf & 0.0838 & 0.4053 \\ \hline
+4 & in1mf4 & gaussmf & 0.0838 & 0.6026 \\ \hline
+5 & in1mf5 & gaussmf & 0.0838 & 0.8000 \\ \hline
+\end{tabular}
+\caption{ANFIS Membership Function Parameters for Input 1 (Name: input1).}
+\label{tab:input1_params}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{MF Index} & \textbf{Label} & \textbf{Type} & \textbf{Sigma ($\sigma$)} & \textbf{Center ($c$)} \\ \hline
+1 & in2mf1 & gaussmf & 0.0038 & -0.0264 \\ \hline
+2 & in2mf2 & gaussmf & 0.0038 & -0.0175 \\ \hline
+3 & in2mf3 & gaussmf & 0.0038 & -0.0086 \\ \hline
+4 & in2mf4 & gaussmf & 0.0038 & 0.0003 \\ \hline
+5 & in2mf5 & gaussmf & 0.0038 & 0.0092 \\ \hline
+\end{tabular}
+\caption{ANFIS Membership Function Parameters for Input 2 (Name: input2).}
+\label{tab:input2_params}
+\end{table}
+
+\begin{table}[H]
+\centering
+\resizebox{0.8\textwidth}{!}{% Resize table to fit width if needed
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{Index} & \textbf{Label} & \textbf{Type} & \textbf{Coeff $p_1$ (Input 1)} & \textbf{Coeff $p_2$ (Input 2)} & \textbf{Constant $r$} \\ \hline
+1 & out1mf1 & linear & 1.4513 & -0.1075 & 7.6090 \\ \hline
+2 & out1mf2 & linear & -14.2399 & -0.3287 & 3.2124 \\ \hline
+3 & out1mf3 & linear & 5.7699 & -29.1466 & -0.5021 \\ \hline
+4 & out1mf4 & linear & 12.2091 & -16.6360 & 0.4924 \\ \hline
+5 & out1mf5 & linear & 11.0756 & 4.0414 & 0.4042 \\ \hline
+6 & out1mf6 & linear & -8.5984 & 1.5753 & 1.8653 \\ \hline
+7 & out1mf7 & linear & 0.6313 & -36.8218 & -0.6855 \\ \hline
+8 & out1mf8 & linear & 0.3354 & 21.5828 & 0.6387 \\ \hline
+9 & out1mf9 & linear & 6.5416 & 23.7556 & -0.8091 \\ \hline
+10 & out1mf10 & linear & 0.3514 & -5.7981 & 0.5955 \\ \hline
+11 & out1mf11 & linear & -3.4257 & -8.4417 & 1.3499 \\ \hline
+12 & out1mf12 & linear & -0.0178 & -30.5749 & -0.4827 \\ \hline
+13 & out1mf13 & linear & 0.3049 & 3.2990 & 0.4096 \\ \hline
+14 & out1mf14 & linear & 4.6885 & 0.2467 & -1.2039 \\ \hline
+15 & out1mf15 & linear & -0.1980 & -0.4889 & 0.9226 \\ \hline
+16 & out1mf16 & linear & -2.5811 & 0.1802 & 1.6257 \\ \hline
+17 & out1mf17 & linear & -0.0762 & -33.0575 & -0.4687 \\ \hline
+18 & out1mf18 & linear & -0.1294 & 8.0773 & 0.6381 \\ \hline
+19 & out1mf19 & linear & 4.1727 & -5.2262 & -1.7867 \\ \hline
+20 & out1mf20 & linear & 4.5206 & 4.6200 & -1.6243 \\ \hline
+21 & out1mf21 & linear & -2.8615 & 2.5358 & 2.3547 \\ \hline
+22 & out1mf22 & linear & -0.7659 & -26.1477 & 0.1533 \\ \hline
+23 & out1mf23 & linear & -0.6827 & 16.9574 & 1.2060 \\ \hline
+24 & out1mf24 & linear & 7.2394 & -1.5607 & -5.1589 \\ \hline
+25 & out1mf25 & linear & 10.4572 & -0.0342 & -7.3627 \\ \hline
+\end{tabular}
+}
+\label{tab:output_params}
+\caption{ANFIS Linear Parameters for Output Membership Functions (Sugeno Type).}
+\end{table}
+
+\begin{table}[H]
+\centering
+\label{tab:fuzzy_rules_grid}
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+\textbf{Input 1 \ Input 2 } & \textbf{MF1} & \textbf{MF2} & \textbf{MF3} & \textbf{MF4} & \textbf{MF5} \\ \hline
+\textbf{MF1} & MF1 & MF2 & MF3 & MF4 & MF5 \\ \hline
+\textbf{MF2} & MF6 & MF7 & MF8 & MF9 & MF10 \\ \hline
+\textbf{MF3} & MF11 & MF12 & MF13 & MF14 & MF15 \\ \hline
+\textbf{MF4} & MF16 & MF17 & MF18 & MF19 & MF20 \\ \hline
+\textbf{MF5} & MF21 & MF22 & MF23 & MF24 & MF25 \\ \hline
+\end{tabular}
+\caption{Fuzzy Rule Base Matrix for ANFIS Model.}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.8\linewidth]{FisSurface.png}
+    \caption{ANFIS Surface Control Diagram.}
+    \label{fig:surfaceAd}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % --- Top Image ---
+    \begin{subfigure}[b]{0.7\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{partAdtrain.png}
+        \label{fig:partAdtrain}
+    \end{subfigure}
+    
+    % --- Bottom Image ---
+    \begin{subfigure}[b]{0.7\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{partAdcheck.png}
+        \label{fig:partAdcheck}
+    \end{subfigure}
+    
+    \caption{Training and Checking Data Test for ANFIS Model.}
+    \label{fig:partAdtraincheck}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.8\linewidth]{partAdnew.png}
+    \caption{Step Response for the ANFIS Model.}
+    \label{fig:responseAd}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Metric} & \textbf{s1} & \textbf{s2} \\ \hline
+Rise Time (min) & 0 & 152.1712 \\ \hline
+Transient Time (min) & NaN & NaN \\ \hline
+Settling Time (min) & NaN & NaN \\ \hline
+Settling Min & 0 & 0.7164 \\ \hline
+Settling Max & 1 & 0.8715 \\ \hline
+Overshoot (\%) & 25 & 8.9375 \\ \hline
+Undershoot & 0 & 0 \\ \hline
+Peak Value & 1 & 0.8715 \\ \hline
+Peak Time (min) & 65.1773 & 240.1310 \\ \hline
+\end{tabular}
+\caption{Step Info for ANFIS Model.}
+\label{tab: characteristicsAd}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Performance Index} & \textbf{Numerical Value} \\ \hline
+Mean Absolute Error (MAE) & 0.153223 \\ \hline
+Mean Square Error (MSE) & 0.047187 \\ \hline
+Root-Mean Square Error (RMSE) &  0.217227 \\ \hline
+\end{tabular}
+\caption{Performance Metrics for Muscle Relaxation Control for ANFIS Model.}
+\label{tab:performanceAd}
+\end{table}
+
+\subsection{(e)}
+Controller flexibility, within the context of the assignment, referred to the capability of the controller to accurately adapt to the dynamics of the patient environment.
+Regarding this, all the controllers developed were relatively flexible, as neither controller relied on the systems of equations, Equations (A1) and (A2), like conventional controllers to tune the gain parameters ($K_p, K_i, K_d$).
+Where conventional PID controllers may work, their limitations became more apparent when the "real life situations" did not match the fixed mathematical model, FIS held the advantage in approximating the strategy, through rules-based, rather than mathematical.
+Consequently, this leads to controllers that could more robustly handle non-linear variations than conventional PID controllers.
+\\
+
+For the three FIS controllers, the ANFIS controller was considered the most flexible.
+As though inference of the system equations was not as important for FIS, Fuzzy controllers depended on robust rule bases to infer their control actions.
+And to tune such correctly, basic intuition of the underlying system behaviour had to be understood; following this, the rules and MFs had to then be manually tuned.
+Which was subject to trial-and-error and subjectivity.
+The AFIS controller bypassed the subjective tuning of parameters and based its control actions solely on learnt data.
+Referred to as a "universal approximator", the model was able to develop rules and MFs automatically, which captured the dynamics of the system and "learnt" the necessary control actions.
+\\
+
+Building upon the analysis of the developed controllers in the discussions of Part A sections (b), (c), and (d). 
+A comparison of the different controllers' performances can be seen below in Table \ref{tab:controller_performance}.
+The Fuzzy PI controller had a ~ 48\% lower MAE value than the next lowest controller (ANFIS) and  a ~ 3\% lower RMSE value than the next lowest controller (ANFIS).
+This meant that the Fuzzy PI controller deviated 48\% less than the next best controller, from the reference value of 0.8, and had a less major advantage over the other controllers, regarding the average magnitude of error.
+Therefore, the conclusion that the Fuzzy PI controller performed the best was well founded. 
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Index} & \textbf{Fuzzy PI (Manual TUNING)} & \textbf{Fuzzy PD (Adjusted FIS)} & \textbf{ANFIS Model} \\ \hline
+MAE & 0.0793 & 0.1882 & 0.1532 \\ \hline
+RMSE & 0.2111 & 0.2994 & 0.2172 \\ \hline
+\end{tabular}
+\caption{Performance Comparison of Muscle Relaxation Controllers}
+\label{tab:controller_performance}
+\end{table}
+
+\section{Part B}
+
+\subsection{(a)}
+
+The dataset was first randomly shuffled to prevent any risks associated with data biases. 
+Following this, the shuffled dataset was then split 70/30 to training and checking data respectively.
+The code used to process the data was as follows:
+
+\begin{verbatim}
+dataset = acs323assignmentdata;
+n = size(dataset, 1);
+shuffledIndices = randperm(n);
+shuffledData = dataset(shuffledIndices, :);
+splitPoint = round(0.7 * n);
+trainData = shuffledData(1:splitPoint, :);
+checkData = shuffledData(splitPoint+1:end, :);
+\end{verbatim}
+
+Equations (B1) and (B2) details the TSK functions used in the following questions.
+(B1) represents the linear TSK function and (B2) displays the constant TSK function. 
+
+\begin{equation}
+z = p_1(x_1) + p_2(x_2) + p_3(x_3) + p_4(x_4) + r
+\tag{B1}
+\end{equation}
+
+\begin{equation}
+z = r 
+\tag{B2}
+\end{equation}
+
+Tables \ref{tab:inputlinearBa} - \ref{tab:outputBaC} demonstrates the MF definitions for linear and constant outputs.
+Figure \ref{fig:CombinedThree} shows the training and checking performance of the two ANFIS models on real data.
+Figures \ref{fig:surfacelinearBa} and \ref{fig:surfaceconstantBa} details the surface diagrams for the two ANFIS models.
+\\
+
+Training, for all the ANFIS models discussed from here on out, employed the initial value of 7 epochs, a hybrid optimisation method, and 0 error tolerance.
+Critical to the training was to ensure that the model's error did not increase from its previous epoch, which reduced the risk of overfitting.
+Utilising Tables \ref{tab:performanceBaLinear} and \ref{tab:performanceBaConstant}, analysis between the linear and constant ANFIS models was made.
+Despite the efforts made to reduce overfitting, the ANFIS model trained with linear outputs suffered from this issue.
+Made prevalent from the disparity of error between training and checking data, where a larger error in checking data implied overfitting and a high error in both indicated underfitting.
+Therefore, the desired outcome was a low error for both training and checking, with an emphasis on low checking data error.
+Overfitting meant that the ANFIS model trained with linear outputs "learnt" to predict the noise in the training data, not the underlying pattern present in both the training and checking data.
+For the ANFIS model with the constant TSK function, the results were much more desirable, where the training and checking data yielded low errors.
+The RMSE value in the training data test was attributed to the noise within the data.
+Thus, taking this into account as well as visual inspection of the training test graph, the RMSE training value was assumed to be much lower than 123.3576.
+Moreover, as low checking data error held more importance to the performance of the ANFIS model.
+It was appropriately concluded that a fit ANFIS model with 3 rules per input was developed.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Input Name} & \textbf{MF Index} & \textbf{Label} & \textbf{Sigma ($\sigma$)} & \textbf{Center ($c$)} \\ \hline
+\multirow{3}{*}{\textbf{Input 1} ($0.021 - 0.16$)} 
+ & 1 & in1mf1 & 0.0299 & 0.0213 \\ \cline{2-5} 
+ & 2 & in1mf2 & 0.0289 & 0.0901 \\ \cline{2-5} 
+ & 3 & in1mf3 & 0.0297 & 0.1595 \\ \hline
+\hline
+\multirow{3}{*}{\textbf{Input 2} ($0.01 - 0.45$)} 
+ & 1 & in2mf1 & 0.0935 & 0.0101 \\ \cline{2-5} 
+ & 2 & in2mf2 & 0.0932 & 0.2300 \\ \cline{2-5} 
+ & 3 & in2mf3 & 0.0935 & 0.4499 \\ \hline
+\hline
+\multirow{3}{*}{\textbf{Input 3} ($0.31 - 2.16$)} 
+ & 1 & in3mf1 & 0.3928 & 0.3100 \\ \cline{2-5} 
+ & 2 & in3mf2 & 0.3927 & 1.2350 \\ \cline{2-5} 
+ & 3 & in3mf3 & 0.3928 & 2.1600 \\ \hline
+\hline
+\multirow{3}{*}{\textbf{Input 4} ($0 - 0.024$)} 
+ & 1 & in4mf1 & 0.0080 & 0.0018 \\ \cline{2-5} 
+ & 2 & in4mf2 & 0.0009 & 0.0058 \\ \cline{2-5} 
+ & 3 & in4mf3 & 0.0118 & 0.0206 \\ \hline
+\end{tabular}
+\caption{Input MR parameters (Gaussian). 
+For the ANFIS model with linear outputs.}
+\label{tab:inputlinearBa}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Input Name} & \textbf{MF Index} & \textbf{Label} & \textbf{Sigma ($\sigma$)} & \textbf{Center ($c$)} \\ \hline
+\multirow{3}{*}{\textbf{input1} (0.021 - 0.16)} 
+ & 1 & in1mf1 & 0.0285 & 0.0207 \\ \cline{2-5} 
+ & 2 & in1mf2 & 0.0297 & 0.0903 \\ \cline{2-5} 
+ & 3 & in1mf3 & 0.0331 & 0.1578 \\ \hline
+\hline
+\multirow{3}{*}{\textbf{input2} (0.01 - 0.45)} 
+ & 1 & in2mf1 & 0.0932 & 0.0099 \\ \cline{2-5} 
+ & 2 & in2mf2 & 0.0934 & 0.2299 \\ \cline{2-5} 
+ & 3 & in2mf3 & 0.0932 & 0.4500 \\ \hline
+\hline
+\multirow{3}{*}{\textbf{input3} (0.31 - 2.16)} 
+ & 1 & in3mf1 & 0.3927 & 0.3101 \\ \cline{2-5} 
+ & 2 & in3mf2 & 0.3925 & 1.2351 \\ \cline{2-5} 
+ & 3 & in3mf3 & 0.3929 & 2.1599 \\ \hline
+\hline
+\multirow{3}{*}{\textbf{input4} (0 - 0.024)} 
+ & 1 & in4mf1 & 0.0051 & 0.0000 \\ \cline{2-5} 
+ & 2 & in4mf2 & 0.0051 & 0.0120 \\ \cline{2-5} 
+ & 3 & in4mf3 & 0.0051 & 0.0240 \\ \hline
+\end{tabular}
+\label{tab:inputconstantBa}
+\caption{Input MR parameters (Gaussian). 
+For the ANFIS model with constant outputs.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{4pt} % Adjust column spacing slightly
+\begin{tabular}{|c|r|r|r|r|r|}
+\hline
+\textbf{Rule} & \textbf{$p_1$ (In1)} & \textbf{$p_2$ (In2)} & \textbf{$p_3$ (In3)} & \textbf{$p_4$ (In4)} & \textbf{Const $r$} \\ \hline
+1 & 1.9401 & 601.9182 & 2592.5201 & -144.0716 & 4845.5868 \\ \hline
+2 & -71.1272 & -118.7686 & -687.9680 & -11.2787 & -1437.7729 \\ \hline
+3 & -515.7546 & -2423.3371 & -381.9734 & -76.8269 & -6180.7671 \\ \hline
+4 & -145.9279 & 1785.8714 & 1306.2866 & 71.4476 & -3234.6400 \\ \hline
+5 & 53.9921 & 222.1839 & 1009.2995 & -0.1269 & 692.0184 \\ \hline
+6 & 782.8737 & 3104.9524 & -1771.4084 & 46.3355 & 4421.4283 \\ \hline
+7 & 88.6124 & 517.3047 & 1189.4710 & -19.9888 & -176.4322 \\ \hline
+8 & -10.0299 & 2.3829 & -983.0283 & -3.7615 & -521.0469 \\ \hline
+9 & 174.6102 & 1204.1187 & 1226.7780 & -21.0007 & -2561.6120 \\ \hline
+10 & -116.1991 & -1312.8305 & 1934.6430 & -389.0441 & -2560.1653 \\ \hline
+11 & -170.5849 & -373.3104 & -887.1911 & -17.2961 & -2117.5219 \\ \hline
+12 & -612.3857 & 6741.9800 & -3686.2571 & 187.8545 & 2410.7495 \\ \hline
+13 & 376.8677 & 7713.1160 & -881.9487 & 1041.8589 & -17.6086 \\ \hline
+14 & -30.5351 & -407.0769 & -51.4625 & 0.8316 & 165.6558 \\ \hline
+15 & 1554.4048 & 5130.2836 & 1972.7931 & -406.8046 & -4230.8679 \\ \hline
+16 & 88.4823 & -252.7307 & 561.9862 & 81.1505 & -551.7432 \\ \hline
+17 & 3.0945 & 54.6949 & 361.2836 & -1.5547 & 130.1609 \\ \hline
+18 & 631.1955 & -1337.0960 & 625.9689 & 86.1082 & -637.4773 \\ \hline
+19 & 262.0059 & -1637.0601 & 1595.2409 & 27.6886 & -3158.7455 \\ \hline
+20 & 2.0952 & 6.9944 & 18.8609 & 0.0057 & 0.2549 \\ \hline
+21 & 425.3452 & 1164.0901 & 4792.2387 & 107.2873 & 6160.3287 \\ \hline
+22 & 44.8481 & -4858.0495 & -2642.2734 & 169.9530 & 3750.8679 \\ \hline
+23 & 10.7115 & -79.3313 & -537.1429 & -1.8461 & -408.6606 \\ \hline
+24 & 348.6188 & -3890.5338 & -2483.9645 & 0.4254 & 5311.1122 \\ \hline
+25 & 28.7908 & 18.4142 & 2084.6123 & 30.3792 & 778.1113 \\ \hline
+26 & 33.9195 & 129.1088 & 668.8948 & 0.9339 & 365.8854 \\ \hline
+27 & -97.3199 & -497.7552 & 904.1190 & 9.8142 & -1114.3419 \\ \hline
+\end{tabular}
+\label{tab:linearBa1}
+\caption{Linear output parameters (Part 1 of 3)}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{|c|r|r|r|r|r|}
+\hline
+\textbf{Rule} & \textbf{$p_1$ (In1)} & \textbf{$p_2$ (In2)} & \textbf{$p_3$ (In3)} & \textbf{$p_4$ (In4)} & \textbf{Const $r$} \\ \hline
+28 & 154.6723 & 11065.3078 & -12436.6843 & 909.3682 & 2570.7790 \\ \hline
+29 & 203.6861 & 207.3652 & 2818.8066 & -14.5964 & 964.7361 \\ \hline
+30 & 659.1905 & 1392.7946 & 1700.1527 & -602.2355 & 2598.3090 \\ \hline
+31 & 591.7609 & -1619.6474 & -3532.5396 & 2338.2672 & 6721.1815 \\ \hline
+32 & 306.1074 & 499.9852 & -1053.1999 & -64.5174 & 3161.4200 \\ \hline
+33 & -3104.2826 & 1654.9960 & 1187.0818 & -1622.6852 & -1566.5789 \\ \hline
+34 & -418.6847 & -3673.9463 & 183.4999 & -26.3050 & -3483.2116 \\ \hline
+35 & 157.7259 & -698.1027 & 1700.4179 & 3.8023 & 583.6180 \\ \hline
+36 & -774.0976 & -1154.3544 & 2103.4996 & 28.9387 & -1900.1130 \\ \hline
+37 & -4747.2481 & -5908.8914 & 2434.9357 & 5783.5077 & 2412.3255 \\ \hline
+38 & 551.6820 & 62.7074 & -188.2541 & -79.6931 & -2648.9988 \\ \hline
+39 & 5735.2761 & 6207.5785 & -1295.0725 & -3476.3212 & -1567.1235 \\ \hline
+40 & -6069.1762 & 4657.7032 & 2700.2316 & 30393.8126 & -2892.4198 \\ \hline
+41 & 577.8989 & 805.9863 & 463.1457 & 368.6042 & -934.9949 \\ \hline
+42 & -3842.7659 & 1763.3666 & 284.6713 & -14640.9163 & 492.8708 \\ \hline
+43 & -1115.0459 & -638.6347 & 259.0888 & 771.5859 & -5860.4526 \\ \hline
+44 & 213.7447 & 828.6086 & 1474.9244 & 113.4488 & 294.3847 \\ \hline
+45 & -3264.9927 & -591.6572 & -632.1811 & 403.7405 & 2273.9323 \\ \hline
+46 & -3599.5356 & -6608.7688 & -3834.3270 & 252.9218 & 4558.0605 \\ \hline
+47 & 276.8412 & 801.6531 & 2291.5840 & 18.3675 & 2490.3933 \\ \hline
+48 & -1271.9505 & -818.7581 & -244.7196 & -169.0403 & -317.3767 \\ \hline
+49 & -8638.0707 & 11582.1979 & -3206.4589 & 2159.4939 & -820.1505 \\ \hline
+50 & 107.7756 & 1102.0940 & -1117.6100 & 216.0048 & 2660.6704 \\ \hline
+51 & -7105.2137 & 16279.6456 & -3322.5432 & -941.2580 & -1138.8364 \\ \hline
+52 & -320.7173 & 1774.3498 & 5520.9324 & 222.3662 & 2011.4015 \\ \hline
+53 & -126.2478 & -85.8334 & 106.3213 & 43.3033 & -320.3812 \\ \hline
+54 & -628.0970 & 1685.5962 & -537.0522 & -4.9140 & 2098.0130 \\ \hline
+\end{tabular}
+\label{tab:linearBa2}
+\caption{Linear output parameters (Part 2 of 3)}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{|c|r|r|r|r|r|}
+\hline
+\textbf{Rule} & \textbf{$p_1$ (In1)} & \textbf{$p_2$ (In2)} & \textbf{$p_3$ (In3)} & \textbf{$p_4$ (In4)} & \textbf{Const $r$} \\ \hline
+55 & 1825.2323 & 1214.7807 & 3357.0203 & 158.1284 & -553.4758 \\ \hline
+56 & 81.3715 & 350.8338 & 338.6141 & 0.0951 & 794.0505 \\ \hline
+57 & 1484.3452 & 0.3247 & 655.0333 & -118.1837 & -437.4458 \\ \hline
+58 & 80.0769 & -3479.2843 & -2717.1781 & 489.3745 & 1645.8659 \\ \hline
+59 & -382.3177 & 61.7876 & -2776.5181 & -40.5330 & -2760.2155 \\ \hline
+60 & 108.6080 & -5830.8414 & 2143.1761 & -390.5884 & -1074.7701 \\ \hline
+61 & 188.6566 & -1127.3058 & 3925.8373 & 17.8589 & 1446.5199 \\ \hline
+62 & 170.0753 & -70.3867 & 2679.8088 & 10.5614 & 1493.0089 \\ \hline
+63 & 153.9742 & -666.1592 & 1646.2214 & -2.9494 & 635.9733 \\ \hline
+64 & 1456.7919 & -104.6811 & -3216.5795 & 966.5656 & -6119.3067 \\ \hline
+65 & 1442.0850 & 2611.6673 & 4976.3357 & 73.3584 & 12284.1096 \\ \hline
+66 & -2607.8525 & 1877.0619 & -4072.4120 & -465.8828 & 4164.8672 \\ \hline
+67 & 1001.3196 & 134.5334 & -1070.5436 & 4875.6165 & 1686.1573 \\ \hline
+68 & -402.2186 & -615.5093 & 826.6844 & 27.6441 & -2006.5034 \\ \hline
+69 & -2240.8608 & 69.8837 & -4934.8569 & -2687.6413 & 7452.3114 \\ \hline
+70 & 464.9008 & 345.8704 & 8032.6523 & 149.6004 & 2776.2890 \\ \hline
+71 & 122.5076 & 259.8606 & 1871.0796 & 26.3145 & 1280.7733 \\ \hline
+72 & 430.6264 & -1889.3652 & 2683.3042 & -93.8303 & -1561.5369 \\ \hline
+73 & 2957.5866 & 1313.5025 & 365.3310 & 74.1809 & 6176.1756 \\ \hline
+74 & 88.2229 & 208.7659 & 480.3444 & 5.6380 & 803.5376 \\ \hline
+75 & 1057.5923 & 1605.5167 & 3069.5764 & -6.5010 & 3377.4577 \\ \hline
+76 & 5459.9569 & 9170.1489 & 2742.6922 & 395.4599 & 3174.6796 \\ \hline
+77 & -64.5877 & -54.6692 & -1573.3318 & 25.2029 & -628.5178 \\ \hline
+78 & 3564.3695 & 9654.9076 & -11326.0481 & -247.3059 & -511.2061 \\ \hline
+79 & -164.4758 & -264.7401 & -3540.9514 & -17.4963 & -2406.3870 \\ \hline
+80 & -45.7860 & -125.1566 & -666.9250 & 4.4868 & -467.5412 \\ \hline
+81 & -405.7562 & -930.8996 & -6960.9643 & -65.9403 & -4816.3426 \\ \hline
+\end{tabular}
+\label{tab:linearBa3}
+\caption{Linear output parameters (Part 3 of 3)}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small % Normal small size, not tiny
+\begin{tabular}{|c|r||c|r||c|r|}
+\hline
+\textbf{Rule} & \textbf{Value ($r$)} & \textbf{Rule} & \textbf{Value ($r$)} & \textbf{Rule} & \textbf{Value ($r$)} \\ \hline
+1 & 14498.8855 & 28 & 759.3621 & 55 & -2386.8841 \\ \hline
+2 & 910.3533 & 29 & 316.1931 & 56 & 1470.6841 \\ \hline
+3 & -809.4168 & 30 & 491.3855 & 57 & -959.4660 \\ \hline
+4 & 2828.9416 & 31 & -11096.8436 & 58 & 48488.3564 \\ \hline
+5 & -122.9034 & 32 & 271.1270 & 59 & 801.9123 \\ \hline
+6 & 826.3814 & 33 & 658.6496 & 60 & -198.2869 \\ \hline
+7 & 2716.4116 & 34 & 24230.0402 & 61 & 4246.1345 \\ \hline
+8 & 1017.7601 & 35 & 704.0678 & 62 & 1804.7508 \\ \hline
+9 & -147.5029 & 36 & -21.3934 & 63 & 0.7850 \\ \hline
+10 & -6782.7853 & 37 & 2477.2185 & 64 & -9018.7667 \\ \hline
+11 & -5192.4286 & 38 & 622.8943 & 65 & -1031.6255 \\ \hline
+12 & 6099.9200 & 39 & -4.4716 & 66 & 2679.9213 \\ \hline
+13 & 2443.7997 & 40 & 1055.7865 & 67 & -1669.5106 \\ \hline
+14 & 1260.7766 & 41 & 226.7905 & 68 & 2089.9839 \\ \hline
+15 & -457.7380 & 42 & 694.7226 & 69 & -1216.2522 \\ \hline
+16 & -33726.1118 & 43 & 670.3642 & 70 & -17261.5427 \\ \hline
+17 & -828.1251 & 44 & 1554.8488 & 71 & -2157.0305 \\ \hline
+18 & 679.7042 & 45 & -65.3582 & 72 & 4273.6190 \\ \hline
+19 & -273.3039 & 46 & 1843.7981 & 73 & 12117.3005 \\ \hline
+20 & 3245.2766 & 47 & 14308.4310 & 74 & -16877.9252 \\ \hline
+21 & 1993.2514 & 48 & -6984.0321 & 75 & -18937.2574 \\ \hline
+22 & 15343.2642 & 49 & -4446.8559 & 76 & 17900.1264 \\ \hline
+23 & -1069.0763 & 50 & 335.6071 & 77 & -685.1764 \\ \hline
+24 & 1649.9268 & 51 & 72.9239 & 78 & 6216.7020 \\ \hline
+25 & -16449.5015 & 52 & 15385.6601 & 79 & 4350.1234 \\ \hline
+26 & 2359.3900 & 53 & 1327.1709 & 80 & -17653.8864 \\ \hline
+27 & 27.4984 & 54 & 2708.5910 & 81 & -11989.2248 \\ \hline
+\end{tabular}
+\label{tab:outputBaC}
+\caption{Constant output parameters.}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    % --- Top Row (1 Image) ---
+    \begin{subfigure}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{BaLinear.png}
+        \caption{Linear training data test.}
+        \label{fig:BaLinear}
+    \end{subfigure}
+    
+    \vspace{0.5cm} % Vertical spacing between rows
+    
+    % --- Bottom Row (2 Images) ---
+    \begin{subfigure}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{BaConstant.png}
+        \caption{Constant training data test.}
+        \label{fig:BaConstant}
+    \end{subfigure}
+    \hfill % Pushes the images to the left and right edges
+    \begin{subfigure}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{BaConstantChecking.png}
+        \caption{Constant checking data set.}
+        \label{fig:BaConstantChecking}
+    \end{subfigure}
+    
+    \caption{The corresponding training and checking tests for ANFIS model with either linear or constant output.}
+    \label{fig:CombinedThree}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % --- Top Image ---
+    \begin{subfigure}[b]{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{set1linearA.png}
+        \label{fig:set1linearA}
+    \end{subfigure}
+    
+    % --- Bottom Image ---
+    \begin{subfigure}[b]{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{set1ConstantA.png}
+        \label{fig:set1ConstantA}
+    \end{subfigure}
+    
+    \caption{Surface diagram for of all the inputs for the ANFIS model with linear outputs.}
+    \label{fig:surfacelinearBa}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % --- Top Image ---
+    \begin{subfigure}[b]{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{set2linearB.png}
+        \label{fig:set2linearB}
+    \end{subfigure}
+    
+    % --- Bottom Image ---
+    \begin{subfigure}[b]{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{set2ConstantA.png}
+        \label{fig:set2ConstantA}
+    \end{subfigure}
+    
+    \caption{Surface diagram for of all the inputs for the ANFIS model with constant outputs.}
+    \label{fig:surfaceconstantBa}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Performance Index} & \textbf{Numerical Value} \\ \hline
+Mean Absolute Error (MAE) Training & 9.6266 \\ \hline
+Mean Absolute Error (MAE) Checking & 40.8223 \\ \hline
+Root-Mean Square Error (RMSE) Training &  15.8076 \\ \hline
+Root-Mean Square Error (RMSE) Checking &  90.0454\\ \hline
+\end{tabular}
+\caption{Performance indices for the ANFIS model with linear outputs.}
+\label{tab:performanceBaLinear}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Performance Index} & \textbf{Numerical Value} \\ \hline
+Mean Absolute Error (MAE) Training & 15.4909 \\ \hline
+Mean Absolute Error (MAE) Checking & 26.2911 \\ \hline
+Root-Mean Square Error (RMSE) Training &  123.3576 \\ \hline
+Root-Mean Square Error (RMSE) Checking &  35.8944\\ \hline
+\end{tabular}
+\caption{Performance indices for the ANFIS model with constant outputs.}
+\label{tab:performanceBaConstant}
+\end{table}
+
+\subsection{(b)}
+
+The output given the following unseen input vectors were calculated through the MATLAB command line:
+
+\begin{verbatim}
+inputValue = [0.15, 0.22, 1, 0.011;
+    0.06, 0.28, 0.4, 0.012];
+
+predictedOutputs = evalfis(<myFISModel>, inputValue);
+\end{verbatim}
+
+Where the results can be seen in Table \ref{tab:predictionBb}, both ANFIS models discussed in Part B section (b) were investigated to validate the fitness of the model.
+Given the range of the provided dataset, see Table \ref{tab:datasetRanges}, merit was given to the conclusions investigated in the previous section.
+Though not totally.
+Although the ANFIS model with the constant TSK function did indeed provide outputs closer to the range of the dataset, it was not by much.
+In fact, both the AFIS models failed to provide an output (for the second vector input) within the dataset range.
+\\
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Linear Model Output (for vector input one and two)} &  470.9847 &  840.2741 \\ \hline
+\textbf{Constant Model Output (for vector input one and two)} & 489.7330 & 766.3264\\ \hline
+\end{tabular}
+\label{tab:predictionBb}
+\caption{Comparison of predicted outputs: linear vs. constant TSK.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|}    
+\hline
+\textbf{Variable} & \textbf{Minimum Value} & \textbf{Maximum Value} \\ \hline
+Input 1 & 0.0210 & 0.1600 \\ \hline
+Input 2 & 0.0100 & 0.4500 \\ \hline
+Input 3 & 0.3100 & 2.1600 \\ \hline
+Input 4 & 0.0000 & 0.0240 \\ \hline
+Output & 298.0692 & 662.5476 \\ \hline
+\end{tabular}
+\label{tab:datasetRanges}
+\caption{Dataset operating ranges (Minimum/Maximum).}
+\end{table}
+
+\subsection{(c)}
+
+The dataset was partitioned in the same way described in Part B section (a).
+As well as the hybrid optimisation technique.
+Given the requirements of the assignment, grid partitioning was utilised to generate the FIS.
+To combat the risk of overfitting, the gaussian MF type remained the only one explored throughout this assignment, this was because provided the best comprimise for keeping the parameters whilst maintaining a smooth and accurate response.
+The reason for limiting the parameter size stems from the "curse of dimensionality." 
+Introducing more rules and inputs exponentially increases the number of parameters within the ANFIS model.
+As the task was to expand the previous ANFIS model from three MF per input to four and then to five, limiting the parameter size in any way possible was critical.
+As the number of parameters increases, the "volume" of the corresponding input space grows larger and larger, up to a point where the data sparsely locates the space, leaving "empty space" where nothing can be learned from, resulting in overfitting.
+Preventing the model from learning the underlying pattern within the data, rather than "connecting the dots" caused by noise.
+This may also explain why ANFIS models with the constant TSK function fared better than linear TSK.
+Due to the constant TSK only having one parameter per rule, whereas the linear TSK had five parameters per rule.
+\\
+
+See Tables \ref{tab:starttables} - \ref{tab:performanceBc4Constant} and Figures \ref{fig:FourResponses} - \ref{fig:surface4} for the information relevant to the ANFIS model with four MFs per input.
+Likewise for the ANFIS models see Tables \ref{tab:inputtable} - \ref{performanceBc5Constant} and Figures \ref{fig:BcComparison5} -\ref{fig:endfig}.
+Generally, the ANFIS models with constant TSK performed better than the linear counterparts.
+Reinforcing the points discussed above. 
+However, contradictory to those points, the ANFIS model with four MFs per inputs performed worse than with five MFs per input, regarding the MAE and RMSE data of the training and checking tests. 
+This may be caused grid partitioning method, where the space input space is equally split up into a 4x4x4x4 grid, where it was split in a way that may split key data clusters down the middle.
+This places boundaries through key data clusters rather than around them, this creates rules that lack the necessary data for an accurate result, leading to poor generalisation. 
+Perhaps this was the reason as to why the ANFIS models, which utilised odd numbers of MFs per input, performed better, as the boundaries included the middle section of the dataset. 
+\\
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Input} & \textbf{MF} & \textbf{Label} & \textbf{Sigma ($\sigma$)} & \textbf{Center ($c$)} \\ \hline
+\multirow{4}{*}{\textbf{input1} (0.021 - 0.16)} 
+ & 1 & in1mf1 & 0.0197 & 0.0210 \\ \cline{2-5} 
+ & 2 & in1mf2 & 0.0197 & 0.0673 \\ \cline{2-5} 
+ & 3 & in1mf3 & 0.0197 & 0.1137 \\ \cline{2-5} 
+ & 4 & in1mf4 & 0.0197 & 0.1600 \\ \hline
+\hline
+\multirow{4}{*}{\textbf{input2} (0.01 - 0.45)} 
+ & 1 & in2mf1 & 0.0623 & 0.0100 \\ \cline{2-5} 
+ & 2 & in2mf2 & 0.0623 & 0.1567 \\ \cline{2-5} 
+ & 3 & in2mf3 & 0.0623 & 0.3033 \\ \cline{2-5} 
+ & 4 & in2mf4 & 0.0623 & 0.4500 \\ \hline
+\hline
+\multirow{4}{*}{\textbf{input3} (0.31 - 2.16)} 
+ & 1 & in3mf1 & 0.2619 & 0.3100 \\ \cline{2-5} 
+ & 2 & in3mf2 & 0.2619 & 0.9267 \\ \cline{2-5} 
+ & 3 & in3mf3 & 0.2619 & 1.5433 \\ \cline{2-5} 
+ & 4 & in3mf4 & 0.2619 & 2.1600 \\ \hline
+\hline
+\multirow{4}{*}{\textbf{input4} (0 - 0.024)} 
+ & 1 & in4mf1 & 0.0034 & 0.0000 \\ \cline{2-5} 
+ & 2 & in4mf2 & 0.0034 & 0.0080 \\ \cline{2-5} 
+ & 3 & in4mf3 & 0.0034 & 0.0160 \\ \cline{2-5} 
+ & 4 & in4mf4 & 0.0034 & 0.0240 \\ \hline
+\end{tabular}
+\caption{Input MF parameters for ANFIS model with linear TSK and four MF per input. }
+\label{tab:starttables}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{Rule} & \textbf{$p_1$} & \textbf{$p_2$} & \textbf{$p_3$} & \textbf{$p_4$} & \textbf{Const $r$} \\ \hline
+1 & 0.3411 & -2.1774 & 34.2410 & 0.3071 & 11.1180 \\ \hline
+2 & 9.5012 & 27.4118 & 6.3377 & 0.9150 & 204.5617 \\ \hline
+3 & -1.1128 & 0.6087 & -30.1775 & -0.2656 & -24.9564 \\ \hline
+4 & 0.0002 & 0.0014 & -0.0090 & 0.0000 & -0.0073 \\ \hline
+5 & 11.7822 & 22.8666 & 288.6958 & 1.4316 & 240.1799 \\ \hline
+6 & -24.3839 & 90.8154 & -26.9831 & -14.0956 & -708.7630 \\ \hline
+7 & -28.5966 & -14.4749 & -635.0072 & -6.4712 & -645.4362 \\ \hline
+8 & 0.0274 & 0.0401 & 0.1366 & 0.0042 & 0.0445 \\ \hline
+9 & 15.0232 & 27.5057 & 342.3022 & 1.9499 & 283.0175 \\ \hline
+10 & 40.8990 & 143.4401 & 215.7928 & -4.3361 & 402.4824 \\ \hline
+11 & -6.2849 & -6.2250 & -160.5731 & -1.0033 & -214.6685 \\ \hline
+12 & 0.2532 & 0.2936 & 7.6921 & 0.0648 & 4.4722 \\ \hline
+13 & 0.1956 & 0.4833 & -26.5601 & -0.0952 & -15.9156 \\ \hline
+14 & 9.1963 & 10.2295 & 100.9433 & 0.5833 & 20.5157 \\ \hline
+15 & 7.2868 & 7.5661 & 242.0961 & 1.8257 & 133.4196 \\ \hline
+16 & 0.0990 & 0.1219 & 3.3775 & 0.0268 & 1.8883 \\ \hline
+17 & -35.5289 & -116.4938 & 448.7930 & 0.2587 & -728.0740 \\ \hline
+18 & 27.4617 & 73.3775 & 318.3775 & 5.0978 & 512.4287 \\ \hline
+19 & 17.5006 & 66.9320 & 160.8860 & 3.7262 & 297.5463 \\ \hline
+20 & 0.1187 & 0.4770 & 1.1246 & 0.0265 & 2.0500 \\ \hline
+\end{tabular}
+\caption{Output MF parameters for ANFIS model with linear TSK and four MF per input. 
+For the sake of readability, only the first 20 out of 256 rules are displayed. 
+See the corresponding .fis file for the total list. }
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Input} & \textbf{MF} & \textbf{Label} & \textbf{Sigma ($\sigma$)} & \textbf{Center ($c$)} \\ \hline
+\multirow{4}{*}{\textbf{input1} (0.021 - 0.16)} 
+ & 1 & in1mf1 & 0.0201 & 0.0212 \\ \cline{2-5} 
+ & 2 & in1mf2 & 0.0199 & 0.0675 \\ \cline{2-5} 
+ & 3 & in1mf3 & 0.0197 & 0.1137 \\ \cline{2-5} 
+ & 4 & in1mf4 & 0.0202 & 0.1597 \\ \hline
+\hline
+\multirow{4}{*}{\textbf{input2} (0.01 - 0.45)} 
+ & 1 & in2mf1 & 0.0625 & 0.0101 \\ \cline{2-5} 
+ & 2 & in2mf2 & 0.0622 & 0.1567 \\ \cline{2-5} 
+ & 3 & in2mf3 & 0.0622 & 0.3034 \\ \cline{2-5} 
+ & 4 & in2mf4 & 0.0623 & 0.4500 \\ \hline
+\hline
+\multirow{4}{*}{\textbf{input3} (0.31 - 2.16)} 
+ & 1 & in3mf1 & 0.2619 & 0.3100 \\ \cline{2-5} 
+ & 2 & in3mf2 & 0.2618 & 0.9266 \\ \cline{2-5} 
+ & 3 & in3mf3 & 0.2619 & 1.5433 \\ \cline{2-5} 
+ & 4 & in3mf4 & 0.2621 & 2.1599 \\ \hline
+\hline
+\multirow{4}{*}{\textbf{input4} (0 - 0.024)} 
+ & 1 & in4mf1 & 0.0079 & 0.0040 \\ \cline{2-5} 
+ & 2 & in4mf2 & 0.0007 & 0.0100 \\ \cline{2-5} 
+ & 3 & in4mf3 & 0.0008 & 0.0173 \\ \cline{2-5} 
+ & 4 & in4mf4 & 0.0088 & 0.0222 \\ \hline
+\end{tabular}
+\caption{Input MF parameters for ANFIS model with constant TSK and four MF per input. }
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Rule/MF} & \textbf{Label} & \textbf{Constant Value ($r$)} \\ \hline
+1 & out1mf1 & 3761.4002 \\ \hline
+2 & out1mf2 & 255.4075 \\ \hline
+3 & out1mf3 & 0.0079 \\ \hline
+4 & out1mf4 & -87.0505 \\ \hline
+5 & out1mf5 & 3376.7427 \\ \hline
+6 & out1mf6 & 739.3860 \\ \hline
+7 & out1mf7 & 4.6162 \\ \hline
+8 & out1mf8 & -3206.3325 \\ \hline
+9 & out1mf9 & 3337.3340 \\ \hline
+10 & out1mf10 & 86.8023 \\ \hline
+11 & out1mf11 & 9.9466 \\ \hline
+12 & out1mf12 & -4091.2311 \\ \hline
+13 & out1mf13 & -1353.9376 \\ \hline
+14 & out1mf14 & 46.7682 \\ \hline
+15 & out1mf15 & 0.1994 \\ \hline
+16 & out1mf16 & 59.3512 \\ \hline
+17 & out1mf17 & -7682.6963 \\ \hline
+18 & out1mf18 & 705.5756 \\ \hline
+19 & out1mf19 & 0.1593 \\ \hline
+20 & out1mf20 & 2017.7935 \\ \hline
+\end{tabular}
+\caption{Output MF parameters for ANFIS model with constant TSK and four MF per input. 
+For the sake of readability, only the first 20 out of 256 rules are displayed. 
+See the corresponding .fis file for the total list. }
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    % --- Top Row ---
+    \begin{subfigure}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{BcLinear4T.png}
+        \caption{Training linear TSK.}
+        \label{fig:BcLinear4T}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{BcLinear4C.png}
+        \caption{Training Linear TSK.}
+        \label{fig:BcLinear4C}
+    \end{subfigure}
+    
+    \vspace{0.5cm} % Spacing between rows
+    
+    % --- Bottom Row ---
+    \begin{subfigure}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{BcConstant4T.png}
+        \caption{Training constant TSK.}
+        \label{fig:BcConstant4T}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{BcConstant4C.png}
+        \caption{Training constant TSK.}
+        \label{fig:BcConstant4C}
+    \end{subfigure}
+    
+    \caption{Comparison between the training and checking tests performed on the ANFIS model with four MF for each input. }
+    \label{fig:FourResponses}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % --- Top Image ---
+    \begin{subfigure}[b]{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{FigureC1Linear.png}
+        \label{fig:FigureC1Linear}
+    \end{subfigure}
+    
+    % --- Bottom Image ---
+    \begin{subfigure}[b]{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{FigureC2Linear.png}
+        \label{fig:FigureC2Linear}
+    \end{subfigure}
+    
+    \caption{Surface diagram for the ANFIS model with linear TSK and four MF per input.}
+    \label{fig:ComparisonCLinear}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % --- Top Image ---
+    \begin{subfigure}[b]{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{FigureC1.png}
+        \label{fig:FigureC1}
+    \end{subfigure}
+    
+    % --- Bottom Image ---
+    \begin{subfigure}[b]{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{FigureC2.png}
+        \label{fig:FigureC2}
+    \end{subfigure}
+    
+    \caption{Surface diagram for the ANFIS model with constant TSK and four MF per input.}
+    \label{fig:surface4}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Performance Index} & \textbf{Numerical Value} \\ \hline
+Mean Absolute Error (MAE) Training & 8.9866 \\ \hline
+Mean Absolute Error (MAE) Checking & 47.0311 \\ \hline
+Root-Mean Square Error (RMSE) Training &  15.5213 \\ \hline
+Root-Mean Square Error (RMSE) Checking &  124.9521\\ \hline
+\end{tabular}
+\caption{Performance indices for the ANFIS model linear TSK and four MF per input.}
+\label{tab:performanceBc4linear}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Performance Index} & \textbf{Numerical Value} \\ \hline
+Mean Absolute Error (MAE) Training & 10.2959 \\ \hline
+Mean Absolute Error (MAE) Checking & 55.6869 \\ \hline
+Root-Mean Square Error (RMSE) Training &  16.3736 \\ \hline
+Root-Mean Square Error (RMSE) Checking &  125.9379\\ \hline
+\end{tabular}
+\caption{Performance indices for the ANFIS model constant TSK and four MF per input.}
+\label{tab:performanceBc4Constant}
+\end{table}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{table}[H]
+\centering
+\caption{Input Membership Function Parameters (Gaussian)}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Input} & \textbf{MF} & \textbf{Label} & \textbf{Sigma ($\sigma$)} & \textbf{Center ($c$)} \\ \hline
+\multirow{5}{*}{\textbf{Input 1} ($0.021 - 0.16$)} 
+ & 1 & in1mf1 & 0.0147 & 0.0210 \\ \cline{2-5} 
+ & 2 & in1mf2 & 0.0146 & 0.0557 \\ \cline{2-5} 
+ & 3 & in1mf3 & 0.0141 & 0.0900 \\ \cline{2-5} 
+ & 4 & in1mf4 & 0.0147 & 0.1249 \\ \cline{2-5} 
+ & 5 & in1mf5 & 0.0147 & 0.1600 \\ \hline
+\hline
+\multirow{5}{*}{\textbf{Input 2} ($0.01 - 0.45$)} 
+ & 1 & in2mf1 & 0.0470 & 0.0101 \\ \cline{2-5} 
+ & 2 & in2mf2 & 0.0467 & 0.1200 \\ \cline{2-5} 
+ & 3 & in2mf3 & 0.0466 & 0.2300 \\ \cline{2-5} 
+ & 4 & in2mf4 & 0.0466 & 0.3401 \\ \cline{2-5} 
+ & 5 & in2mf5 & 0.0467 & 0.4500 \\ \hline
+\hline
+\multirow{5}{*}{\textbf{Input 3} ($0.31 - 2.16$)} 
+ & 1 & in3mf1 & 0.1964 & 0.3100 \\ \cline{2-5} 
+ & 2 & in3mf2 & 0.1964 & 0.7725 \\ \cline{2-5} 
+ & 3 & in3mf3 & 0.1964 & 1.2350 \\ \cline{2-5} 
+ & 4 & in3mf4 & 0.1964 & 1.6975 \\ \cline{2-5} 
+ & 5 & in3mf5 & 0.1964 & 2.1600 \\ \hline
+\hline
+\multirow{5}{*}{\textbf{Input 4} ($0 - 0.024$)} 
+ & 1 & in4mf1 & 0.0037 & 0.0007 \\ \cline{2-5} 
+ & 2 & in4mf2 & 0.0005 & 0.0049 \\ \cline{2-5} 
+ & 3 & in4mf3 & 0.0088 & 0.0073 \\ \cline{2-5} 
+ & 4 & in4mf4 & 0.0071 & 0.0158 \\ \cline{2-5} 
+ & 5 & in4mf5 & 0.0025 & 0.0240 \\ \hline
+\end{tabular}
+\label{tab:inputtable}
+\caption{Input MF parameters for ANFIS model with linear TSK and five MF per input. }
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{MF/Rule} & \textbf{$p_1$ (In1)} & \textbf{$p_2$ (In2)} & \textbf{$p_3$ (In3)} & \textbf{$p_4$ (In4)} & \textbf{Constant $r$} \\ \hline
+1 & 1.5831 & 2.4233 & 17.5791 & 0.2469 & 34.4155 \\ \hline
+2 & 0.0003 & 0.0005 & 0.0037 & 0.0001 & 0.0074 \\ \hline
+3 & 7.2126 & 11.0825 & 77.8579 & 1.1237 & 156.8109 \\ \hline
+4 & 3.4336 & 5.2957 & 36.7681 & 0.5341 & 74.6534 \\ \hline
+5 & -0.0000 & 0.0000 & -0.0000 & -0.0000 & -0.0000 \\ \hline
+6 & 1.3744 & 1.7521 & 21.5749 & 0.2075 & 29.8086 \\ \hline
+7 & 0.0002 & 0.0003 & 0.0023 & 0.0000 & 0.0045 \\ \hline
+8 & 3.6390 & 6.4047 & 62.9031 & 0.3337 & 78.9434 \\ \hline
+9 & 0.6842 & 2.5473 & 12.6603 & -0.0784 & 14.7792 \\ \hline
+10 & -0.0000 & -0.0000 & -0.0000 & -0.0000 & -0.0000 \\ \hline
+11 & 1.2300 & 0.4012 & 25.0894 & 0.2016 & 26.3070 \\ \hline
+12 & 0.0001 & 0.0001 & 0.0018 & 0.0000 & 0.0012 \\ \hline
+13 & 3.0883 & -6.0225 & -7.9766 & 0.0800 & 59.8133 \\ \hline
+14 & -0.1236 & -5.8328 & -61.3006 & -0.3758 & -8.1060 \\ \hline
+15 & 0.0000 & 0.0000 & 0.0010 & 0.0000 & 0.0006 \\ \hline
+16 & 0.6135 & 0.2318 & 59.8270 & 0.2126 & 31.6103 \\ \hline
+17 & 0.0008 & 0.0004 & 0.0659 & 0.0002 & 0.0357 \\ \hline
+18 & 2.0870 & -0.2292 & 244.5935 & 0.8895 & 118.2586 \\ \hline
+19 & 1.5684 & 0.1305 & 137.0773 & 0.6212 & 65.6798 \\ \hline
+20 & 0.0002 & 0.0002 & 0.0083 & 0.0001 & 0.0050 \\ \hline
+\end{tabular}
+\label{tab:tsk_linear_params_sample}
+\caption{Output MF parameters for ANFIS model with linear TSK and four MF per input. 
+For the sake of readability, only the first 20 out of 256 rules are displayed. 
+See the corresponding .fis file for the total list. }
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Input} & \textbf{MF} & \textbf{Label} & \textbf{Sigma ($\sigma$)} & \textbf{Center ($c$)} \\ \hline
+\multirow{5}{*}{\textbf{input1} (0.021 - 0.16)} 
+ & 1 & in1mf1 & 0.0147 & 0.0210 \\ \cline{2-5} 
+ & 2 & in1mf2 & 0.0147 & 0.0557 \\ \cline{2-5} 
+ & 3 & in1mf3 & 0.0142 & 0.0900 \\ \cline{2-5} 
+ & 4 & in1mf4 & 0.0149 & 0.1249 \\ \cline{2-5} 
+ & 5 & in1mf5 & 0.0148 & 0.1600 \\ \hline
+\hline
+\multirow{5}{*}{\textbf{input2} (0.01 - 0.45)} 
+ & 1 & in2mf1 & 0.0468 & 0.0101 \\ \cline{2-5} 
+ & 2 & in2mf2 & 0.0468 & 0.1201 \\ \cline{2-5} 
+ & 3 & in2mf3 & 0.0466 & 0.2300 \\ \cline{2-5} 
+ & 4 & in2mf4 & 0.0466 & 0.3400 \\ \cline{2-5} 
+ & 5 & in2mf5 & 0.0467 & 0.4500 \\ \hline
+\hline
+\multirow{5}{*}{\textbf{input3} (0.31 - 2.16)} 
+ & 1 & in3mf1 & 0.1964 & 0.3100 \\ \cline{2-5} 
+ & 2 & in3mf2 & 0.1964 & 0.7725 \\ \cline{2-5} 
+ & 3 & in3mf3 & 0.1964 & 1.2350 \\ \cline{2-5} 
+ & 4 & in3mf4 & 0.1964 & 1.6975 \\ \cline{2-5} 
+ & 5 & in3mf5 & 0.1964 & 2.1600 \\ \hline
+\hline
+\multirow{5}{*}{\textbf{input4} (0 - 0.024)} 
+ & 1 & in4mf1 & 0.0017 & -0.0003 \\ \cline{2-5} 
+ & 2 & in4mf2 & 0.0009 & 0.0040 \\ \cline{2-5} 
+ & 3 & in4mf3 & 0.0095 & 0.0071 \\ \cline{2-5} 
+ & 4 & in4mf4 & 0.0066 & 0.0162 \\ \cline{2-5} 
+ & 5 & in4mf5 & 0.0026 & 0.0240 \\ \hline
+\end{tabular}
+\caption{Input MF parameters for ANFIS model with constant TSK and five MF per input. }
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Constant Consequent Parameters for mymodel3constant (First 20 of 625 Rules)}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Rule/MF} & \textbf{Label} & \textbf{Constant Value ($r$)} \\ \hline
+1 & out1mf1 & 0.5048 \\ \hline
+2 & out1mf2 & 0.2819 \\ \hline
+3 & out1mf3 & 150.9867 \\ \hline
+4 & out1mf4 & 58.6420 \\ \hline
+5 & out1mf5 & -0.0000 \\ \hline
+6 & out1mf6 & 2.7750 \\ \hline
+7 & out1mf7 & 0.1717 \\ \hline
+8 & out1mf8 & 84.1378 \\ \hline
+9 & out1mf9 & -13.2821 \\ \hline
+10 & out1mf10 & -0.0001 \\ \hline
+11 & out1mf11 & -0.0417 \\ \hline
+12 & out1mf12 & -0.0192 \\ \hline
+13 & out1mf13 & 55.6433 \\ \hline
+14 & out1mf14 & -51.2263 \\ \hline
+15 & out1mf15 & 0.0053 \\ \hline
+16 & out1mf16 & 0.0568 \\ \hline
+17 & out1mf17 & 1.5024 \\ \hline
+18 & out1mf18 & 498.8370 \\ \hline
+19 & out1mf19 & 322.2320 \\ \hline
+20 & out1mf20 & -0.0036 \\ \hline
+\end{tabular}
+\caption{Output MF parameters for ANFIS model with constant TSK and five MF per input. 
+For the sake of readability, only the first 20 out of 256 rules are displayed. 
+See the corresponding .fis file for the total list. }
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    % --- Top Row ---
+    \begin{subfigure}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{BcLinear5T.png}
+        \caption{Training linear TSK.}
+        \label{fig:BcLinear5T}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{BcLinear5C.png}
+        \caption{Checking linear TSK.}
+        \label{fig:BcLinear5C}
+    \end{subfigure}
+    
+    \vspace{0.5cm} % Spacing between rows
+    
+    % --- Bottom Row ---
+    \begin{subfigure}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{BcConstant5T.png}
+        \caption{Training constant TSK.}
+        \label{fig:BcConstant5T}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{BcConstant5C.png}
+        \caption{Checking constant TSK.}
+        \label{fig:BcConstant5C}
+    \end{subfigure}
+    
+    \caption{Comparison between the training and checking tests performed on the ANFIS model with five MF for each input.}
+    \label{fig:BcComparison5}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % --- Top Image ---
+    \begin{subfigure}[b]{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Figure1D5linear.png}
+        \label{fig:Figure1D5linear}
+    \end{subfigure}
+    
+    % --- Bottom Image ---
+    \begin{subfigure}[b]{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Figure2D5linear.png}
+        \label{fig:Figure2D5linear}
+    \end{subfigure}
+    
+    \caption{Surface diagram for the ANFIS model with linear TSK and five MF per input.}
+    \label{fig:ComparisonD5_Linear}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    % --- Top Image ---
+    \begin{subfigure}[b]{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Figure1D5constant.png}
+        \label{fig:Figure1D5constant}
+    \end{subfigure}
+    
+    % --- Bottom Image ---
+    \begin{subfigure}[b]{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Figure2D5constant.png}
+        \label{fig:Figure2D5constant}
+    \end{subfigure}
+    
+    \caption{Surface diagram for the ANFIS model with constant TSK and five MF per input.}
+    \label{fig:endfig}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Performance Index} & \textbf{Numerical Value} \\ \hline
+Mean Absolute Error (MAE) Training & 8.9408 \\ \hline
+Mean Absolute Error (MAE) Checking & 29.2006 \\ \hline
+Root-Mean Square Error (RMSE) Training &  15.5187 \\ \hline
+Root-Mean Square Error (RMSE) Checking &  49.4058\\ \hline
+\end{tabular}
+\caption{Performance indices for the ANFIS model linear TSK and five MF per input.}
+\label{tab:performanceBc5linear}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Performance Index} & \textbf{Numerical Value} \\ \hline
+Mean Absolute Error (MAE) Training & 8.9785 \\ \hline
+Mean Absolute Error (MAE) Checking & 33.7830 \\ \hline
+Root-Mean Square Error (RMSE) Training &  15.5200 \\ \hline
+Root-Mean Square Error (RMSE) Checking &  55.3293\\ \hline
+\end{tabular}
+\caption{Performance indices for the ANFIS model constant TSK and five MF per input.}
+\label{tab:performanceBc5Constant}
+\end{table}
+
+\subsection{(d)}
+
+The outputs given to the input vectors were calculated in the same way as described in Part B section (b).
+Where the results are displayed below, Table \ref{tab:predictionBd}. 
+Taking into account the dataset ranges, in Table \ref{tab:datasetRanges}, all four ANFIS models derived outputted values that were within the range.
+Despite the large error present in the ANFIS models that implemented four MFs per input.
+\\
+
+\begin{table}[H]
+\centering
+% |l| means left align the first column (looks better for text)
+% | >{\centering\arraybackslash}p{2.5cm} | sets a fixed width and centers the content
+\begin{tabular}{|l| >{\centering\arraybackslash}p{3.5cm} | >{\centering\arraybackslash}p{2.5cm} |}
+\hline
+\multicolumn{3}{|c|}{\textbf{ANFIS model for four MFs per input (for vector input one and two)}} \\
+\hline
+\textbf{Linear Model Output} & 479.0220 & 598.6861\\ \hline
+\textbf{Constant Model Output} & 457.3261 & 237.2395\\ \hline
+\hline
+\multicolumn{3}{|c|}{\textbf{ANFIS model for five MFs per input (for vector input one and two)}} \\
+\hline
+\textbf{Linear Model Output } & 424.1764 & 332.6950\\ \hline
+\textbf{Constant Model Output } & 416.0601 & 268.0697\\ \hline
+\end{tabular}
+\caption{Predicted outputs for the two vector inputs using the ANFIS }
+\label{tab:predictionBd}
+\end{table}
+
+\subsection{(e)}
+
+Continuing upon the discussion on the models derived throughout Pat B sections (a) and (c), further analysis was made on which of those models were the fittest.
+The basis was built upon the fact that the same partitioned data (which was randomly divided in a 70/30 manner), optimisation technique (hybrid), method for FIS generation (grid partitioning) were employed, and more importantly, the ANFIS models were developed with the constant TSK function.
+Via the discussions mentioned, the conclusion was that constant TSK models performed were deemed more fit to the dataset.
+The only parameter that differed was the number of epochs that the model trained in.
+This training process was manually stopped when the error with the previous input increased, to prevent overfitting.
+\\
+
+By taking into account the outputted values discussed in Part B sections (b) and (d), as well as the training and checking data error, seen in Figures \ref{tab:performanceBaConstant}, \ref{tab:performanceBc4Constant}, and \ref{tab:performanceBc5Constant}, the validation of which model were the fittest was carried out.
+More weight was given to the fitness of the model was associated to the error associated with the checking data error, this metric captured how well the model generalised the pattern of the unseen data.
+Regarding this, the model with three MFs per input performed the best out of the sample.
+The reason why this was, was discussed extensively in Part B section (c).
+Simply put, the ANFIS models suffered more from overfitting due to the increase in parameters, such that the model "learnt" the noise rather than the underlying pattern.
+Hence, the checking RMSE values grew as a reflection of overfitting.
+\\
+
+Accounting for the predicted output of the three models, the model with three MFs per input was the least fit.
+Where the predicted output lay outside the dataset range and within the scope of data deemed noise.
+Therefore, when factoring in the two performance parameters for the fitness of the model, the model with five MFs per input was the fittest.
+However, though the predicted output tests aid in the decision of which model was the fittest, it was only a sample of two unseen datapoints.
+A sample size much less than the one used in the checking data test.
+Thus, with more importance on the RMSE of the checking test, the model with 3 MFs per input was the fittest overall.
+\\
+
+\section{References}
+\bibliographystyle{IEEEtranN}
+\bibliography{References}
+
+
+\section{Appendix}
+\subsubsection{MATLAB Code for Running the Genetic Algorithm.}
+
+\begin{verbatim}
+%   Define upper and lower bounds for the scaling factors
+lb = [0, 0, 0]; 
+ub = [15, 70, 0.5]; 
+
+%   Define the options for the genetic algo
+    40 max generations, as my laptop could not handle more
+options = optimoptions('ga', 'MaxGenerations', 40, 'PopulationSize', 20, 'PlotFcn', @gaplotbestf);
+
+%   Run the genetic algo, using the cost funtion ObjectiveFunction
+[Best_Gains, Min_ISE] = ga(@ObjectiveFunction, 3, [], [], [], [], lb, ub, [], options);
+
+
+function fval = ObjectiveFunction(x)
+    %   Function that loads and runs the simulink model
+    %   Assigns scaling factor values, runs the simulation, calculates the corresponding ISE for that run 
+    %   with those specific scaling factors 
+
+    %   Load the simulink model
+    modelName = 'acs323_m5'; 
+    
+    %   Assign the scaling factor to parameters, ensure that the path for the blocks are correct
+    set_param([modelName '/K5'], 'Gain', num2str(x(1)));
+    set_param([modelName '/K4'], 'Gain', num2str(x(2)));
+    set_param([modelName '/K6'], 'Gain', num2str(x(3)));
+    
+    %   Run the simulation
+    simOut = sim(modelName, 'ReturnWorkspaceOutputs', 'on');
+    
+    
+    % Calculate the ISE 
+    e = simOut.simout1.Data;
+    t = simOut.simout1.Time;
+    % fval = Integral(e^2)dt
+    value = trapz(t, e.^2); 
+end
+\end{verbatim}
+
+\end{document}
