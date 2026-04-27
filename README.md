@@ -10,3 +10,7 @@ Improvements are worth 20% so research other filter design and talk about the ad
 Also this coursework is meant to be an intro into IIIR filters as we have yet to cover that.
 
 How to label a specific thing in MATLAB https://uk.mathworks.com/help/signal/ug/find-peaks-in-data.html
+
+# Today 27/04/2026
+
+compartmentalise the scripts so manage the filter design between fir and IIR. Plot the magnitude response then justify your chosen one based off of 
