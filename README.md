@@ -22,3 +22,6 @@ https://www.jscholaronline.org/articles/JBER/Signal-Processing.pdf
 
 <img width="651" height="548" alt="image" src="https://github.com/user-attachments/assets/5c768b4c-f736-492f-a76d-0c4bbe8fdb99" />
 
+# Explaning dB
+https://www.rs-online.com/designspark/the-decibel-whats-it-for
+https://www.tutorialspoint.com/article/how-decibel-operations-are-performed-through-logarithms
