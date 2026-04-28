@@ -19,3 +19,6 @@ Improvements
 https://www.gehealthcare.com/en-gb/insights/article/a-guide-to-ecg-signal-filtering?srsltid=AfmBOorO0iyMcS0j3Ol9LTTeTXs5DEP_bC-UXo4p8zso0wB2Kt0XewCn
 https://www.youtube.com/watch?v=QDAUVsC6_Ow
 https://www.jscholaronline.org/articles/JBER/Signal-Processing.pdf
+
+<img width="651" height="548" alt="image" src="https://github.com/user-attachments/assets/5c768b4c-f736-492f-a76d-0c4bbe8fdb99" />
+
