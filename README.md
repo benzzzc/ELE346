@@ -14,3 +14,8 @@ How to label a specific thing in MATLAB https://uk.mathworks.com/help/signal/ug/
 # Today 27/04/2026
 
 compartmentalise the scripts so manage the filter design between fir and IIR. Plot the magnitude response then justify your chosen one based off of 
+
+Improvements 
+https://www.gehealthcare.com/en-gb/insights/article/a-guide-to-ecg-signal-filtering?srsltid=AfmBOorO0iyMcS0j3Ol9LTTeTXs5DEP_bC-UXo4p8zso0wB2Kt0XewCn
+https://www.youtube.com/watch?v=QDAUVsC6_Ow
+https://www.jscholaronline.org/articles/JBER/Signal-Processing.pdf
