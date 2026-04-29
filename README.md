@@ -20,8 +20,6 @@ https://www.gehealthcare.com/en-gb/insights/article/a-guide-to-ecg-signal-filter
 https://www.youtube.com/watch?v=QDAUVsC6_Ow
 https://www.jscholaronline.org/articles/JBER/Signal-Processing.pdf
 
-<img width="651" height="548" alt="image" src="https://github.com/user-attachments/assets/5c768b4c-f736-492f-a76d-0c4bbe8fdb99" />
-
 # Explaning dB
 https://www.rs-online.com/designspark/the-decibel-whats-it-for
 https://www.tutorialspoint.com/article/how-decibel-operations-are-performed-through-logarithms
@@ -29,3 +27,13 @@ https://www.tutorialspoint.com/article/how-decibel-operations-are-performed-thro
 
 # IIR butterworth Filter design
 https://nightlessbaron.github.io/files/IIR_Filter.pdf
+
+
+# use this 
+https://pmc.ncbi.nlm.nih.gov/articles/PMC4624499/pdf/nihms-719824.pdf
+- The content of T wave lays mostly within a
+range from zero (DC) to 10 Hz. The content of P wave is characterized by 5-30 Hz
+frequencies. The content of QRS usually contains within 8-50 Hz frequencies
+
+# Bandpass 
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/0ce1aedc-c114-487e-bb78-ec8b1d38028b" />
