@@ -25,3 +25,7 @@ https://www.jscholaronline.org/articles/JBER/Signal-Processing.pdf
 # Explaning dB
 https://www.rs-online.com/designspark/the-decibel-whats-it-for
 https://www.tutorialspoint.com/article/how-decibel-operations-are-performed-through-logarithms
+
+
+# IIR butterworth Filter design
+https://nightlessbaron.github.io/files/IIR_Filter.pdf
